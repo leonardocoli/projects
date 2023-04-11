@@ -1,0 +1,85 @@
+#path finder
+#f(n) = g(n) + h(n)
+
+#N > proximo ponto possivel
+
+#G(N) > custo do ponto inicial at'e N
+
+#H(N) > uma fun'cao heuristica que estima o menor custo do N pro ponto final
+
+#1. Gerar uma lista de todos os possiveis proximos passimos da posi'cao atual ao fim
+#2. Armazenar pontos em ordem de prioridade baseado na distancia do primeiro ao ultimo.
+#3. Selecionar proximo ponto e repetir passo 2 at'e nao ter mais pontos possiveis.
+
+
+
+
+#CREATING BASE CLASS
+
+#PriorityQueue 'e uma data structure (data organization management and store) que organizaos items em ordem de prioridade.
+
+from queue import PriorityQueue
+
+#BASE CLASS que armazena todos os passos importantes para o A*
+
+class State(object):
+    def __int__(self, value, position, start = 0, goal = 0):
+        self.open_lst = []          #possibilidades ainda nao visitadas
+        self.close_lst = []         #possibilidades ja visitadas
+        self.position = position    #posi'cao atual
+        self.value = value          #valor atual
+        self.dist = 0               #distancia atual, somente um placeholder que armazena o SubState
+                                    #SubClass ou StateClass
+
+#check the position
+        #a partir da posi'cao atual, oque fazer?
+        if position:
+            self.start = position.start     #store start state
+            self.goal = position.goal       #store goal state
+            self.path = position.path[:]    #copia a potion path para meu path
+                                            #[:] alow to make a copy of the (self.path) list
+                                            #sem [:] o (self.path) vai ter o mesmo valor que o (position.path)
+
+            self.path.append(value)         #store all values in my patch
+                                            #esse path constroi seu proprio caminho e track onde est'a
+
+        else:
+            self.path = [value]             #seleciona um caminho em rela'cao a lista de objetios a partir do valor atual
+            self.start = start              #store start state
+            self.goal = goal                #store goal state
+
+    #criando fun'coes que ser~ao usadas futuramente como sub classes.
+    def GetDistance(self):
+        pass                                #a fun'cao pass 'e usada como um place holder para codigos futuros
+                                            #quando n~ao usamos pass, pode ocorrer em erro.
+    def CreatePossibilities(selfself):
+        pass
+
+class PathState(State):
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#gerar grids
+
+#gerar possiveis caminhos
+
+#encontrar disntancia at'e o final
+
+#encontrar distancia at'e possiveis proximos pontos
