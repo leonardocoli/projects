@@ -1,0 +1,59 @@
+#https://en.wikipedia.org/wiki/Bisection_method
+#steps to bisection method:
+#https://numericalmethodsece101.weebly.com/bisection-method.html
+
+
+#1.      First, choose lower limit/guess (xL) and the upper limit (xU) for the root such that the function changes sign over the interval. This can be checked by ensuring that f(xL)*f(xU) < 0.
+
+#2.      Solve for xR. Use the equation ().
+
+#3.      To get f(xL), substitute the value of xL to the given function. Likewise to get f(xR), substitute the value of xR to the given function. The f(xU) can be don’t get since it will not be use on the next steps.
+
+#4.      Multiply the f(xL) and f(xR).
+
+#a.      If  f(xL) * f(xR) < 0, the root lies in the upper subinterval or limit. Therefore set xU = xR. Then return to step 2 and repeat the steps.
+
+#b.      If  f(xL) * f(xR) > 0, the root lies in the lower subinterval or limit. Therefore set xL = xR. Then return to step 2 and repeat the steps.
+
+#c.       If  f(xL) * f(xR) = 0, the root equals xR. Terminate now the computation.
+
+#Note: the value of the label not being changed is still the same to its recent value. For example if xL = 0 and xU = 1, then the value of xU was changed to the value of xR which is 2, the new values of the for the next iteration will be: xL = 0 and xU = 2.
+
+#5.      Lastly, after repeating the steps from step 2 to step 4, if you the answers to xR became the same then STOP. It only means that the same value         occurring to xR is the root being solved.
+
+
+#INPUT: Definir fun'cao f para intervalo [a,b], tolerancia tol e numero te itera'cao maxima nmax
+#OUTPUT: Valores que diferem de uma raiz de f(x) = 0 menores que a tolerancia
+
+def bisection_method(f,a,b,tol,nmax):
+    i = 1
+    fa = f(a)
+    
+    while i <= nmax:
+        x = (a+b)/2
+        fx = f(x)
+
+        if abs(b-a) < tol or fx == 0:
+            return x
+        else:
+            i += 1
+            if fa * fx > 0:
+                a = x
+                fa = fx
+            else:
+                b = x
+
+    raise Exception("Você ultrapassou o número máximo de iterações do programa")
+
+# Valores de entrada
+a = 0
+b = 2
+tol = 1e-5
+nmax = 1000
+
+# Função para encontrar raiz
+f = lambda x: 1 - (2*x*(e^(-x/2))) -x*sin(x)
+
+# Chama a função de bisseccao
+raizfx = bisection_method(f,a,b,tol,nmax)
+print(raizfx)
