@@ -1,0 +1,218 @@
+from turtle import *
+from time import sleep
+import turtle
+import random
+import time
+turtle.tracer(0,0)
+turtle.bgcolor("black")
+
+nascimentos = 0
+mortes = 0
+
+class coordinate:#cria uma referencia de posição
+    def __init__(self, a=0, b=0):
+        self.x = a # eixo X
+        self.y = b # eixo y
+    def __str__(self):
+        return '({}, {})'.format(self.x, self.y)
+
+class peoples(Turtle):#cria modelo de pessoa
+    def __init__(self, condition='saudável', age=None, local=None, weeks=None, immunetime=0, sicktime=0):
+#da uma coordenada aleatória para o individuo
+        self.local = local
+        if self.local is None:
+            self.local = coordinate()
+            self.local.x = random.randint(-700, 700)
+            self.local.y = random.randint(-350, 350)
+#caracteristicas do individuo no canvas
+        self.turtle = turtle.Turtle()
+        self.turtle.shape('turtle')
+        self.turtle.shapesize(0.9, 0.9, 0.9)
+        self.turtle.color('green')
+        self.turtle.penup()
+        
+        self.turtle.setpos(self.local.x, self.local.y)#manda o individuo para a posição
+        self.condition = condition#da uma condição de saúde para o individuo
+        #da uma idade para o individuo
+        self.age = age
+        if age == None:
+            self.age = random.randint(1,49)
+#temporizadores para idade, tempo imune e tempo doente
+        self.weeks = weeks
+        self.immunetime = immunetime
+        self.sicktime = sicktime
+        #representa objeto em STR
+    def __str__(self):
+        return '({}, {}, {})'.format(self.condition, self.age, self.local)
+
+    def pace(self):#move o individuo na tela
+        #eixo x
+        x = random.randint(-70,70)#da um valor padrão para deslocamento
+        if self.local.x + x > 700:#checa se o individuo vai passar da tela
+            while self.local.x + x > 700:
+                x = x - 40#manda voltar caso va passar da tela
+        elif self.local.x + x < -700:#checa se o individuo vai passar da tela
+            while self.local.x + x < -700:
+                x = x + 40#manda voltar caso va passar da tela
+                
+        self.local.x += x
+        #eixo y
+        y = random.randint(-74, 74)#da um valor padrão para deslocamento
+        if self.local.y + y > 350:#checa se o individuo vai passar da tela
+            while self.local.y + y > 350:
+                y = y - 30#manda voltar caso va passar da tela
+        elif self.local.y + y < -350:#checa se o individuo vai passar da tela
+            while self.local.y + y < -350:
+                y = y + 30#manda voltar caso va passar da tela
+        self.local.y += y
+
+        self.turtle.setpos(self.local.x, self.local.y)#atualiza local do individuo
+
+    #oque a doença faz com o cara? infecta -> imuniza ou mata
+        
+    def infect(self, lhealthy, lsick):#deixa o individuo no estado doente e vermelho
+        if self.condition == 'imune':#se o individuo esta imuni ele nao é alterado para doente
+            return None
+        else:
+            lsick.append(self)
+            lhealthy.remove(self)
+            self.condition = 'doente'
+            self.turtle.color('red')
+
+    def immunize(self, lsick, limmune):#deixa o individuo no estado imunizado e cinza
+        if self.condition == 'doente' and self.sicktime > d:#se o virus atingiu seu tempo maximo e a pessoa está doente
+            lsick.remove(self)
+            limmune.append(self)
+            self.condition = 'imune'
+            self.turtle.color('gray')
+
+
+    def immune_time_end(self, limmune, lhealthy):#tempo até perder a imunidade
+        if self.condition == 'imune' and self.immunetime > 52:#estipula tempo maximo imune como 52 e retira imunidade se estiver maior que o tempo e imune
+            limmune.remove(self)
+            l.healthy.append(self)
+            self.condition = 'saudável'
+            self.turtle.color('green')
+        else:
+            return None
+        
+    def kill(self, total):#mata o individuo pela doença e deleta das listas
+        global mortes
+        if self.sicktime == 10:#analisa se merece morrer na decima semana doente
+            diechance = random.randint(0, 1000)
+            if diechance <= c:
+                total.remove(self)
+                self.turtle.hideturtle()
+                mortes += 1
+                del self
+        else:
+            return None
+        
+    def die(self, total):#mata o individuo por velhice
+        global mortes
+        if self.age == 50:
+            total.remove(self)
+            self.turtle.hideturtle()
+            mortes += 1
+            del self
+        else:
+            return None
+        
+    def birth(self, total):#gera bebes caso a populaçao seja menor que 300 individuos
+        global nascimentos
+        pregant = random.randint(1,1000)
+        if n < 300:
+            if pregant <= 10:
+                baby = peoples()
+                baby.age = 0
+                baby.weeks = 0
+                total.append(baby)
+                nascimentos += 1
+        else:
+            return None
+#gera inputs onde o usuario da simulação escolhe as informações basicas para que a simulação possa iniciar
+n = int(input('qual a população total?(recomendado: 150)'))
+j = int(input('qual o numero inicial de infectados?(recomendado: 10)'))
+a = (1000) * float(input('de 0 a 1, qual a chance do virus infectar alguem quando há contato?'))
+l = int(input('qual a distancia minima para se infectar?'))
+c = (1000) * float(input('de 0 a 1, qual o nivel de mortalidade do virus?'))
+d = int(input('sabendo que a imunidade do virus dura 52 semanas,quantas semanas dura a infecção?(recomendado: até 100)'))
+
+immunelist = list()
+sicklist = list()
+healthylist = list()
+
+qweeks = 0#tempo na simulação
+allpeople = immunelist + sicklist + healthylist#totaliza os individuos
+allpeople = random.sample(allpeople, len(allpeople))#embaralha os individuos
+#print(allpeople)
+
+for i in range (0, n):#cria novos individuos
+    healthylist.append(peoples())
+    healthylist[i].weeks = random.randint(1, 51)#escolhe quantas semanas de vida a pessoa tem
+#escolhe aleatóriamente os infectados iniciais e escolhe quanto tempo ele tem a doença
+earlyinfect = 0
+while earlyinfect < j:
+    infects = random.randint(0, (n) -1)
+    if infects <= len(healthylist) - 1:
+        healthylist[infects].sicktime = random.randint(0, d//2)
+        healthylist[infects].infect(healthylist, sicklist)
+        earlyinfect += 1
+
+while True:#principal loop para rodar a simulação
+    turtle.update()
+    if len(sicklist) < 1:# analisa se todos invididuos são saudaveis para finalizar o loop
+        print(len(healthylist), 'pessoas estão vivas!')
+        print(len(allpeople), 'viveram na época do virus')
+        print(len(sicklist), 'estão doentes')
+        break
+    if len(healthylist) < 1:# analisa se todos invididuos são doentes para finalizar o loop
+        print(len(healthylist), 'pessoas estão vivas!')
+        print(len(allpeople), 'viveram na época do virus')
+        print(len(sicklist), 'pessoas estão doentes') 
+        break
+#faz com que os individuos se desloquem a cada 0.3 segundos e aumenta a idade deles em semanas
+    for i in allpeople:
+        i.pace()
+    qweeks += 1
+    time.sleep(0.3)
+    
+
+    for z in immunelist:#analisa se o individuo deve perder a imunidade e tornar-se saudavel ou morrer de velho
+        z.immune_time_end(immunelist, healthylist)
+        if z.weeks > 52:
+            z.weeks = 0
+            z.age += 1
+        z.kill(immunelist)
+        z.die(immunelist)
+        z.immunetime += 1
+        z.immune_time_end(immunelist, healthylist)
+
+    for o in healthylist:#faz novos individuos nascerem se necessario
+        o.birth(healthylist)
+
+    for o in healthylist:#manda os saudaveis andarem e os mata caso sejam velhos
+        o.die(healthylist)
+        if o.weeks > 52:
+            o.weeks = 0
+            o.age += 1
+            o.weeks +=1
+
+    for di in sicklist:#analisa se deve ou nao infectar um saudavel
+        di.immunize(sicklist, immunelist)#imuniza ou é imunizado
+        di.kill(sicklist)#morre pela doença caso seja sua hora
+        di.die(sicklist)#morre por idade se mais velho que 52 anos
+        di.sicktime += 1
+        if di.weeks > 52:
+            di.weeks = 0
+            di.age += 1
+        di.weeks += 1
+        for m, sa in enumerate(healthylist):#compara posição de doente com saudavel
+            if di.turtle.distance(sa.local.x, sa.local.y) <= l:#ve se está proximo o suficiente para infectar ou nao
+                if random.randint(0, 1000) <= a:#chance de infectar saudavel caso esteja proximo o suficiente
+                    sa.infect(healthylist, sicklist)
+            
+
+
+    allpeople = immunelist + sicklist + healthylist#atualiza lista com o somatorio de individuos da simulação
+    allpeople = random.sample(allpeople, len(allpeople))#embaralha a lista do somatório
