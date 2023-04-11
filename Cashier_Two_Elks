@@ -1,0 +1,27 @@
+#input value
+
+from math import *
+
+
+n = 0
+total_value = 0.0
+total_taxe = 0.0
+total_vaxe = 0.0
+
+def total_por_item(value):
+    taxe = (value*(0.089))
+    vaxe = taxe + value
+    return (taxe, vaxe)
+
+quan = int(input("How many items are you buying? "))
+
+for i in range(quan):
+    value = float(input("Insert the value of item {}: ".format(i+1)))
+    taxe, vaxe = total_por_item(value)
+    n += 1
+    total_taxe += taxe
+    total_vaxe += vaxe
+    total_value += value
+    print("{} product: value = ${:.2f} / taxes = ${:.2f} / value + taxes = ${:.2f}".format(n, value, taxe, vaxe))
+
+print("The total value is ${:.2f}, the total taxes is ${:.2f}, the total value + taxes is ${:.2f}".format(total_value, total_taxe, total_vaxe))
